@@ -1,10 +1,13 @@
 package com.mayconinforgames.spring.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,4 +61,15 @@ public class FuncionarioController {
 		return ResponseEntity.ok(atualizarFuncionario);
 	}
 
+	@DeleteMapping("/funcionarios/{id}")
+	public ResponseEntity<Map<String, Boolean>> deletarFuncionario(@PathVariable Long id) {
+		Funcionario funcionario = funcionarioRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Não exite Funcionario com id informado " + id));
+		
+		funcionarioRepository.delete(funcionario);
+		Map<String, Boolean> respose = new HashMap<>();
+		respose.put("deleted", Boolean.TRUE);
+		return ResponseEntity.ok(respose);
+	}
+	
 }
